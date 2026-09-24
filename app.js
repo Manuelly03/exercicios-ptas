@@ -15,6 +15,19 @@ app.get('/tarefas', (req, res) => {
   res.json(tarefas);
 });
 
+app.get('/tarefas/:id', (req, res) => {
+    const idBuscado = parseInt(req.params.id);
+    const tarefaEncontrada = tarefas.find(t => t.id === idBuscado);
+
+  if (!tarefaEncontrada) {
+    return res.status(404).json({ erro: 'Tarefa não encontrada' });
+  }
+  
+  res.json(tarefaEncontrada);
+});
+
+
+
 app.listen(3000, () => {
   console.log(`Servidor rodando em http://localhost:3000`);
 });
