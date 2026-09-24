@@ -12,7 +12,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/tarefas', (req, res) => {
-  res.json(tarefas);
+  const { concluida } = req.query; 
+
+  if (concluida !== undefined) {
+    const statusBuscado = concluida === 'true';
+    const tarefasFiltradas = tarefas.filter(t => t.concluida === statusBuscado);
+    return res.json(tarefasFiltradas); 
+  }
+
+  res.json(tarefas); 
 });
 
 app.get('/tarefas/:id', (req, res) => {
@@ -25,8 +33,6 @@ app.get('/tarefas/:id', (req, res) => {
   
   res.json(tarefaEncontrada);
 });
-
-
 
 app.listen(3000, () => {
   console.log(`Servidor rodando em http://localhost:3000`);
