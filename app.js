@@ -7,16 +7,15 @@ const tarefas = [
   { id: 3, titulo: 'Testar rotas', concluida: false }
 ];
 
-app.get('/tarefas', (req, res) => {
-  const { concluida } = req.query; 
-
-  if (concluida !== undefined) {
-    const statusBuscado = concluida === 'true';
-    const tarefasFiltradas = tarefas.filter(t => t.concluida === statusBuscado);
-    return res.json(tarefasFiltradas); 
-  }
-
-  res.json(tarefas); 
+app.post('/tarefas', (req, res) => {
+  const { titulo } = req.body;
+  const novaTarefa = {
+    id: tarefas.length + 1,
+    titulo: titulo,
+    concluida: false
+  };
+  tarefas.push(novaTarefa);
+  res.status(201).json(novaTarefa);
 });
 
 app.listen(3000, () => {
