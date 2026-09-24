@@ -7,11 +7,9 @@ const tarefas = [
   { id: 2, titulo: 'Estudar JavaScript', concluida: true },
   { id: 3, titulo: 'Testar rotas', concluida: false }
 ];
-
 app.get('/', (req, res) => {
   res.send('API de Tarefas está funcionando!');
 });
-
 app.get('/tarefas', (req, res) => {
   const { concluida } = req.query; 
 
@@ -34,8 +32,26 @@ app.get('/tarefas/:id', (req, res) => {
   res.json(tarefaEncontrada);
 });
 
-app.post('/tarefas', (req, res) => {
-  const { titulo } = req.body; 
+function autenticacao(req, res, next) {
+  console.log('-> [Middleware 1]: Verificando autenticação...');
+  next(); 
+}
+function validarCorpo(req, res, next) {
+  console.log('-> [Middleware 2]: Validando dados enviados...');
+  const { titulo } = req.body;
+
+  if (!titulo || titulo.trim() === '') {
+    return res.status(400).json({ erro: 'O campo "titulo" é obrigatório' });
+  }
+  next();
+}
+
+function logger(req, res, next) {
+  console.log('-> [Middleware 3]: Registro de log da ação...');
+  next();
+}
+app.post('/tarefas', [autenticacao, validarCorpo, logger], (req, res) => {
+  const { titulo } = req.body;
   const novaTarefa = {
     id: tarefas.length + 1,
     titulo: titulo,
