@@ -8,11 +8,10 @@ const tarefas = [
   { id: 3, titulo: 'Testar rotas', concluida: false }
 ];
 app.get('/', (req, res) => {
-  res.send('API de Tarefas está funcionando!');
+  res.send('API está funcionando!');
 });
 app.get('/tarefas', (req, res) => {
   const { concluida } = req.query; 
-
   if (concluida !== undefined) {
     const statusBuscado = concluida === 'true';
     const tarefasFiltradas = tarefas.filter(t => t.concluida === statusBuscado);
@@ -21,7 +20,6 @@ app.get('/tarefas', (req, res) => {
 
   res.json(tarefas); 
 });
-
 app.get('/tarefas/:id', (req, res) => {
     const idBuscado = parseInt(req.params.id);
     const tarefaEncontrada = tarefas.find(t => t.id === idBuscado);
@@ -31,13 +29,12 @@ app.get('/tarefas/:id', (req, res) => {
   }
   res.json(tarefaEncontrada);
 });
-
 function autenticacao(req, res, next) {
   console.log('-> [Middleware 1]: Verificando autenticação...');
   next(); 
 }
 function validarCorpo(req, res, next) {
-  console.log('-> [Middleware 2]: Validando dados enviados...');
+  console.log('-> [Middleware 2]: Validando dados enviadoss...');
   const { titulo } = req.body;
 
   if (!titulo || titulo.trim() === '') {
@@ -45,7 +42,6 @@ function validarCorpo(req, res, next) {
   }
   next();
 }
-
 function logger(req, res, next) {
   console.log('-> [Middleware 3]: Registro de log da ação...');
   next();
