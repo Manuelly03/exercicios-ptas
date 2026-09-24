@@ -7,15 +7,15 @@ const tarefas = [
   { id: 3, titulo: 'Testar rotas', concluida: false }
 ];
 
-app.get('/tarefas/:id', (req, res) => {
-  const idBuscado = parseInt(req.params.id);
-  const tarefaEncontrada = tarefas.find(t => t.id === idBuscado);
+app.get('/tarefas', (req, res) => {
+  const { concluida } = req.query; 
 
-  if (!tarefaEncontrada) {
-    return res.status(404).json({ erro: 'Tarefa não encontrada' });
+  if (concluida !== undefined) {
+    const statusBuscado = concluida === 'true';
+    const tarefasFiltradas = tarefas.filter(t => t.concluida === statusBuscado);
+    return res.json(tarefasFiltradas); 
   }
-  
-  res.json(tarefaEncontrada);
+  res.json(tarefas); 
 });
 
 app.listen(3000, () => {
